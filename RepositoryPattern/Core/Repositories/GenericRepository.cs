@@ -1,4 +1,7 @@
-﻿using RepositoryPattern.Core.IRepositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using RepositoryPattern.Core.IRepositories;
+using RepositoryPattern.Data;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,28 +10,37 @@ namespace RepositoryPattern.Core.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
+        //we are able to use application db context through dependency injection we configure on start up class.
+        protected ApplicationDbContext _context;
+        protected DbSet<T> _dbSet;
+        protected ILogger _logger;
 
-        public Task<bool> Add(T entity)
+        public GenericRepository(ApplicationDbContext context, ILogger logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
+
+        public virtual async Task<IEnumerable<T>> All()
+        {
+            return await _dbSet.ToListAsync();
+        }
+        public virtual Task<bool> Add(T entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<T>> All()
+        public virtual Task<bool> Delete(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(Guid id)
+        public virtual async Task<T> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
-        public Task<T> GetById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> Upsert(T entity)
+        public virtual Task<bool> Upsert(T entity)
         {
             throw new NotImplementedException();
         }

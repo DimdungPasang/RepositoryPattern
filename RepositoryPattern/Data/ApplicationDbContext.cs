@@ -11,7 +11,7 @@ namespace RepositoryPattern.Data
 
         }
 
-        //this dbset prop tells efcore to create a table if it doesn't exist  
+        //this dbset prop tells efcore to create a table if it doesn't exist. 
         public virtual DbSet<User> User { get; set; }
     }
 }
