@@ -60,5 +60,28 @@ namespace RepositoryPattern.Core.Repositories
             }
         }
 
+        public override async Task<bool> Delete(Guid id)
+        {
+
+            try
+            {
+                //check if there is existing user
+                var existingUser = await _dbSet.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+                //if user found then delete them from db
+                if (existingUser != null)
+                {
+                    _dbSet.Remove(existingUser);
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} Delete Method Error", typeof(UserRepository));
+                return false;
+            }
+        }
     }
 }

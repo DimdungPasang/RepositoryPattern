@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RepositoryPattern.Core.IConfiguration;
 using RepositoryPattern.Data;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,9 @@ namespace RepositoryPattern
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RepositoryPattern", Version = "v1" });
             });
+
+            //adding to DI container
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
