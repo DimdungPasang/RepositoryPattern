@@ -51,7 +51,7 @@ namespace RepositoryPattern.Controllers
             return Ok(user);
         }
 
-        [HttpGet]
+        [HttpGet()]
         public async Task<IActionResult> GetAllUsers()
         {
             var user = await _unitOfWork.Users.All();
@@ -63,7 +63,7 @@ namespace RepositoryPattern.Controllers
             return Ok(user);
         }
 
-        [HttpPost("{id}")]
+        [HttpPatch("{id}")]  //patch- updates part of  a single resource (partial update) //put- updates all of a single resource
         public async Task<IActionResult> UpdateItem(Guid id, User user)
         {
             if (id != user.Id)
@@ -75,6 +75,22 @@ namespace RepositoryPattern.Controllers
             await _unitOfWork.CompleteAsync();
 
             return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteItem(Guid id)
+        {
+            var item = await _unitOfWork.Users.GetById(id);
+
+            if(item == null)
+            {
+                return BadRequest();
+            }
+
+            await _unitOfWork.Users.Delete(id);
+            await _unitOfWork.CompleteAsync();
+
+            return Ok(item);
         }
     }
 }
